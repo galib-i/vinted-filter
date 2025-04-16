@@ -1,6 +1,15 @@
 <html>
   <body>
-    <h1>Hello World!</h1>
+    <h3>Negative Brand Filter</h3>
+    <label for="negativeBrands">Enter brands to hide (comma-separated):</label>
+    <textarea id="negativeBrands" placeholder="Enter brands to filter (comma-separated)"></textarea>
+    
+    <div style="margin-top: 10px; margin-bottom: 10px;">
+      <input type="checkbox" id="enablePartialMatching" />
+      <label for="enablePartialMatching">Enable partial matching</label>
+    </div>
+    
+    <button id="save">Save</button>
     <script src="popup.js"></script>
   </body>
 </html>
