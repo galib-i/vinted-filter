@@ -1,7 +1,6 @@
 const BRAND_SELECTORS = [
-  '[data-testid="item-brand-link"]',
   '.feed-grid__item .new-item-box__description',
-  '.item-box__brand'
+  '.new-item-box__description'
 ].join(',');
 
 const ITEM_CONTAINER_SELECTORS = 'article, .feed-grid__item, .item-box, .item-view-items__item';
@@ -22,7 +21,7 @@ function filterNegativeBrands() {
       const itemContainer = brandNode.closest(ITEM_CONTAINER_SELECTORS);
       if (itemContainer) {
         itemContainer.style.display = 'none';
-        itemContainer.classList.add('vinted-filter-hidden');
+        // itemContainer.classList.add('vinted-filter-hidden');
       }
     });
   });
