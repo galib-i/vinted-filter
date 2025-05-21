@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   const negativeBrandsTextarea = document.getElementById('negativeBrands');
   const enablePartialMatchingCheckbox = document.getElementById('enablePartialMatching');
-  const STORAGE_KEYS = ['negativeBrands', 'enablePartialMatching'];
+  const hideWardrobeSpotlightCheckbox = document.getElementById('hideWardrobeSpotlight');
+  const STORAGE_KEYS = ['negativeBrands', 'enablePartialMatching', 'hideWardrobeSpotlight'];
 
   chrome.storage.sync.get(STORAGE_KEYS, result => {
     negativeBrandsTextarea.value = result.negativeBrands || '';
     enablePartialMatchingCheckbox.checked = !!result.enablePartialMatching;
+    hideWardrobeSpotlightCheckbox.checked = !!result.hideWardrobeSpotlight;
   });
 
   const cleanBrands = input =>
@@ -21,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chrome.storage.sync.set({
       negativeBrands: negativeBrandsTextarea.value,
-      enablePartialMatching: enablePartialMatchingCheckbox.checked
+      enablePartialMatching: enablePartialMatchingCheckbox.checked,
+      hideWardrobeSpotlight: hideWardrobeSpotlightCheckbox.checked
     }, () => {
       chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         if (tabs[0]?.id) {
@@ -40,4 +43,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   enablePartialMatchingCheckbox.addEventListener('change', saveSettings);
+  hideWardrobeSpotlightCheckbox.addEventListener('change', saveSettings);
 });

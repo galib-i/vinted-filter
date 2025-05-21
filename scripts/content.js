@@ -4,6 +4,18 @@ const BRAND_SELECTORS = [
 ].join(',');
 
 const ITEM_CONTAINER_SELECTORS = 'article, .feed-grid__item, .item-box, .item-view-items__item';
+const WARDROBE_SPOTLIGHT_SELECTOR = '.feed-grid__item.feed-grid__item--full-row';
+
+function hideWardrobeSpotlight() {
+  chrome.storage.sync.get(['hideWardrobeSpotlight'], ({ hideWardrobeSpotlight }) => {
+    if (!hideWardrobeSpotlight) return;
+
+    document.querySelectorAll(WARDROBE_SPOTLIGHT_SELECTOR).forEach(el => {
+      el.style.display = 'none';
+    });
+  }
+  );
+}
 
 function filterNegativeBrands() {
   chrome.storage.sync.get(['negativeBrands', 'enablePartialMatching'], ({ negativeBrands, enablePartialMatching }) => {
@@ -36,13 +48,17 @@ function isNegativeBrand(brandName, negativeBrandList, enablePartialMatching) {
 }
 
 chrome.runtime.onMessage.addListener(message => {
-  if (message.action === "reapplyFilter") filterNegativeBrands();
+  if (message.action === "reapplyFilter") {
+    filterNegativeBrands();
+    hideWardrobeSpotlight();
+  }
 });
 
 function observeDynamicContent() {
   const observer = new MutationObserver(mutationsList => {
     if (mutationsList.some(m => m.addedNodes.length > 0)) {
       filterNegativeBrands();
+      hideWardrobeSpotlight(); // <-- Add this line
     }
   });
 
@@ -51,5 +67,6 @@ function observeDynamicContent() {
 
 window.addEventListener('load', () => {
   filterNegativeBrands();
+  hideWardrobeSpotlight();
   observeDynamicContent();
 });

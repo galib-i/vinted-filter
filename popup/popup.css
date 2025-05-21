@@ -50,3 +50,24 @@ div {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+#options {
+  display: flex;
+  flex-direction: column;
+}
+
+.options-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.option:last-child {
+  margin-bottom: 0;
+}
