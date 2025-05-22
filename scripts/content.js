@@ -3,17 +3,6 @@ const BRAND_SELECTORS = '.new-item-box__description';
 const ITEM_CONTAINER_SELECTORS = '.feed-grid__item, .item-view-items__item';
 const WARDROBE_SPOTLIGHT_SELECTOR = '.feed-grid__item.feed-grid__item--full-row';
 
-function hideWardrobeSpotlight() {
-  chrome.storage.sync.get(['hideWardrobeSpotlight'], ({ hideWardrobeSpotlight }) => {
-    if (!hideWardrobeSpotlight) return;
-
-    document.querySelectorAll(WARDROBE_SPOTLIGHT_SELECTOR).forEach(el => {
-      el.style.display = 'none';
-    });
-  }
-  );
-}
-
 function filterNegativeBrands() {
   chrome.storage.sync.get(['negativeBrands', 'enablePartialMatching'], ({ negativeBrands, enablePartialMatching }) => {
     // Reset all existing filters
@@ -48,10 +37,54 @@ function isNegativeBrand(brandName, negativeBrandList, enablePartialMatching) {
   );
 }
 
+function hideWardrobeSpotlight() {
+  chrome.storage.sync.get(['hideWardrobeSpotlight'], ({ hideWardrobeSpotlight }) => {
+    if (!hideWardrobeSpotlight) return;
+
+    document.querySelectorAll(WARDROBE_SPOTLIGHT_SELECTOR).forEach(el => {
+      el.style.display = 'none';
+    });
+  }
+  );
+}
+
+function showItemTitles() {
+  chrome.storage.sync.get(['showItemTitles'], ({ showItemTitles }) => {
+    if (!showItemTitles) return;
+
+    document.querySelectorAll('.feed-grid__item-content, .item-view-items__item').forEach(item => {
+      const img = item.querySelector('img[alt]');
+      if (img && img.alt) {
+        const altText = img.alt;
+        const parts = altText.split(',');
+        const truncatedText = parts[0];
+
+        // Find the price element
+        const priceElem = item.querySelector('[data-testid$="--price-text"]');
+        if (priceElem) {
+          // Avoid inserting multiple times
+          if (!priceElem.parentNode.querySelector('.vinted-filter-title')) {
+            const titleElem = document.createElement('div');
+            titleElem.textContent = truncatedText;
+            titleElem.className = 'vinted-filter-title';
+
+            // Copy all classes from the price element to the new title element
+            priceElem.classList.forEach(cls => {
+              titleElem.classList.add(cls);
+            });
+  
+            priceElem.parentNode.insertBefore(titleElem, priceElem);
+          }
+        }
+      }
+    });
+  });
+}
+
 chrome.runtime.onMessage.addListener(message => {
   if (message.action === "reapplyFilter") {
     filterNegativeBrands();
-    hideWardrobeSpotlight();
+    showItemTitles();
   }
 });
 
@@ -59,6 +92,7 @@ function observeDynamicContent() {
   const observer = new MutationObserver(mutationsList => {
     if (mutationsList.some(m => m.addedNodes.length > 0)) {
       filterNegativeBrands();
+      showItemTitles();
       hideWardrobeSpotlight();
     }
   });
@@ -68,6 +102,7 @@ function observeDynamicContent() {
 
 window.addEventListener('load', () => {
   filterNegativeBrands();
+  showItemTitles();
   hideWardrobeSpotlight();
   observeDynamicContent();
 });
