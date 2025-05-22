@@ -59,21 +59,25 @@ function showItemTitles() {
         const parts = altText.split(',');
         const truncatedText = parts[0];
 
-        // Find the price element
-        const priceElem = item.querySelector('[data-testid$="--price-text"]');
-        if (priceElem) {
+        // Find the .title-content element
+        const titleContentElem = item.querySelector('.title-content');
+        if (titleContentElem) {
           // Avoid inserting multiple times
-          if (!priceElem.parentNode.querySelector('.vinted-filter-title')) {
+          if (!item.querySelector('.vinted-filter-title')) {
             const titleElem = document.createElement('div');
             titleElem.textContent = truncatedText;
             titleElem.className = 'vinted-filter-title';
 
-            // Copy all classes from the price element to the new title element
-            priceElem.classList.forEach(cls => {
-              titleElem.classList.add(cls);
-            });
-  
-            priceElem.parentNode.insertBefore(titleElem, priceElem);
+            // Optionally copy classes from the price element if needed
+            const priceElem = titleContentElem.querySelector('[data-testid$="--price-text"]');
+            if (priceElem) {
+              priceElem.classList.forEach(cls => {
+                titleElem.classList.add(cls);
+              });
+            }
+
+            // Insert before .title-content
+            titleContentElem.parentNode.insertBefore(titleElem, titleContentElem);
           }
         }
       }
