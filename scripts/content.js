@@ -1,7 +1,4 @@
-const BRAND_SELECTORS = [
-  '.feed-grid__item .new-item-box__description',
-  '.new-item-box__description'
-].join(',');
+const BRAND_SELECTORS = '.new-item-box__description';
 
 const ITEM_CONTAINER_SELECTORS = '.feed-grid__item, .item-view-items__item';
 const WARDROBE_SPOTLIGHT_SELECTOR = '.feed-grid__item.feed-grid__item--full-row';
@@ -19,6 +16,11 @@ function hideWardrobeSpotlight() {
 
 function filterNegativeBrands() {
   chrome.storage.sync.get(['negativeBrands', 'enablePartialMatching'], ({ negativeBrands, enablePartialMatching }) => {
+    // Reset all existing filters
+    document.querySelectorAll(ITEM_CONTAINER_SELECTORS).forEach(itemContainer => {
+      itemContainer.style.display = '';
+    });
+
     if (!negativeBrands) return;
 
     const negativeBrandList = negativeBrands
@@ -33,7 +35,6 @@ function filterNegativeBrands() {
       const itemContainer = brandNode.closest(ITEM_CONTAINER_SELECTORS);
       if (itemContainer) {
         itemContainer.style.display = 'none';
-        // itemContainer.classList.add('vinted-filter-hidden');
       }
     });
   });
