@@ -3,7 +3,7 @@ const BRAND_SELECTORS = [
   '.new-item-box__description'
 ].join(',');
 
-const ITEM_CONTAINER_SELECTORS = 'article, .feed-grid__item, .item-box, .item-view-items__item';
+const ITEM_CONTAINER_SELECTORS = '.feed-grid__item, .item-view-items__item';
 const WARDROBE_SPOTLIGHT_SELECTOR = '.feed-grid__item.feed-grid__item--full-row';
 
 function hideWardrobeSpotlight() {
@@ -58,7 +58,7 @@ function observeDynamicContent() {
   const observer = new MutationObserver(mutationsList => {
     if (mutationsList.some(m => m.addedNodes.length > 0)) {
       filterNegativeBrands();
-      hideWardrobeSpotlight(); // <-- Add this line
+      hideWardrobeSpotlight();
     }
   });
 
