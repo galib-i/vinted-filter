@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <h3>Negative Brand Filter</h3>
+    <label for="negativeBrands">Enter brands to hide (comma-separated):</label>
+    <textarea id="negativeBrands" placeholder="Shein, Primark.."></textarea>
+    
+    <div id="options">
+      <ul class="options-list">
+        <li class="option">
+          <input type="checkbox" id="enablePartialMatching"/>
+          <label class="checkbox-label" for="enablePartialMatching">Enable partial matching</label>
+        </li>
+        <li class="option">
+          <input type="checkbox" id="hideWardrobeSpotlight"/>
+          <label class="checkbox-label" for="hideWardrobeSpotlight">Hide wardrobe spotlight</label>
+        </li>
+          <li class="option">
+          <input type="checkbox" id="showItemTitles"/>
+          <label class="checkbox-label" for="showItemTitles">Show item titles</label>
+        </li>
+      </ul>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

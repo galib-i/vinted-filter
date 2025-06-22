@@ -1,0 +1,21 @@
+{
+  "name": "Vinted Negative Brand Filter",
+  "description": "Select brands to remove from Vinted search results.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.vinted.co.uk/*"],
+      "js": ["scripts/content.js"]
+    }
+  ],
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://www.vinted.co.uk/*"]
+}

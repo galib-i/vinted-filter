@@ -1,0 +1,73 @@
+body {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 16px 18px 14px 18px;
+  min-width: 280px;
+  min-height: 180px;
+}
+
+h3 { 
+  margin-top: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FF2121;
+}
+
+label {
+  font-size: 14px;
+  color: #5A6566;
+}
+
+textarea {
+  font-family: inherit;
+  width: 100%;
+  min-height: 128px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 16px;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  resize: none;
+  background: #fafafa;
+  color: #15191A;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+
+textarea:focus {
+  border: 1.5px solid #FF2121;
+  outline: none;
+}
+
+input[type="checkbox"] {
+  accent-color: #FF2121;
+  margin-right: 6px;
+  transform: scale(1.2); 
+  }
+
+div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#options {
+  display: flex;
+  flex-direction: column;
+}
+
+.options-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.option:last-child {
+  margin-bottom: 0;
+}
