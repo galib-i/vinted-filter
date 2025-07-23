@@ -1,11 +1,11 @@
-const BRAND_SELECTORS = '.new-item-box__description';
+const BRAND_SELECTORS = '[data-testid$="--description-title"]';  // Use testID to speficially target titles only, sizes and condition use the same selector
 
 const ITEM_CONTAINER_SELECTORS = '.feed-grid__item, .item-view-items__item';
 const WARDROBE_SPOTLIGHT_SELECTOR = '.feed-grid__item.feed-grid__item--full-row';
 
 function filterNegativeBrands() {
   chrome.storage.sync.get(['negativeBrands', 'enablePartialMatching'], ({ negativeBrands, enablePartialMatching }) => {
-    // Reset all existing filters
+    // Reset all negative brands
     document.querySelectorAll(ITEM_CONTAINER_SELECTORS).forEach(itemContainer => {
       itemContainer.style.display = '';
     });
@@ -32,7 +32,7 @@ function filterNegativeBrands() {
 function isNegativeBrand(brandName, negativeBrandList, enablePartialMatching) {
   return negativeBrandList.some(negativeBrand =>
     enablePartialMatching
-      ? brandName.includes(negativeBrand)
+      ? (negativeBrand.length >= 3 && brandName.includes(negativeBrand))
       : brandName === negativeBrand
   );
 }
@@ -50,7 +50,10 @@ function hideWardrobeSpotlight() {
 
 function showItemTitles() {
   chrome.storage.sync.get(['showItemTitles'], ({ showItemTitles }) => {
-    if (!showItemTitles) return;
+    if (!showItemTitles) {
+        document.querySelectorAll('.vinted-filter-title').forEach(el => el.remove());
+        return;
+    };
 
     document.querySelectorAll('.feed-grid__item-content, .item-view-items__item').forEach(item => {
       const img = item.querySelector('img[alt]');
@@ -89,6 +92,7 @@ chrome.runtime.onMessage.addListener(message => {
   if (message.action === "reapplyFilter") {
     filterNegativeBrands();
     showItemTitles();
+    hideWardrobeSpotlight();
   }
 });
 
