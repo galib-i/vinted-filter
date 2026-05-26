@@ -1,9 +1,11 @@
 const BRAND_SELECTORS = '[data-testid$="--description-title"]'; // Use testID to speficially target titles only, sizes and condition use the same selector
 
 const ITEM_CONTAINER_SELECTORS =
-  ".feed-grid__item:not(.feed-grid__item--full-row), .item-view-items__item";
+  ".homepage-blocks__item, .feed-grid__item:not(.feed-grid__item--full-row), .item-view-items__item";
 const WARDROBE_SPOTLIGHT_SELECTOR =
   ".feed-grid__item.feed-grid__item--full-row";
+const ITEM_TITLE_SELECTORS =
+  ".new-item-box__container, .feed-grid__item-content, .item-view-items__item";
 
 let settings = {
   negativeBrands: "",
@@ -39,7 +41,6 @@ chrome.storage.onChanged.addListener((changes, area) => {
 });
 
 function filterNegativeBrands() {
-  console.log("negBrands");
   // Reset all negative brands
   document
     .querySelectorAll(ITEM_CONTAINER_SELECTORS)
@@ -96,43 +97,38 @@ function showItemTitles() {
     return;
   }
 
-  document
-    .querySelectorAll(".feed-grid__item-content, .item-view-items__item")
-    .forEach((item) => {
-      const img = item.querySelector("img[alt]");
-      if (img && img.alt) {
-        const altText = img.alt;
-        const parts = altText.split(",");
-        const truncatedText = parts[0];
+  document.querySelectorAll(ITEM_TITLE_SELECTORS).forEach((item) => {
+    const img = item.querySelector("img[alt]");
+    if (img && img.alt) {
+      const altText = img.alt;
+      const parts = altText.split(",");
+      const truncatedText = parts[0];
 
-        // Find the .title-content element
-        const titleContentElem = item.querySelector(".title-content");
-        if (titleContentElem) {
-          // Avoid inserting multiple times
-          if (!item.querySelector(".vinted-filter-title")) {
-            const titleElem = document.createElement("div");
-            titleElem.textContent = truncatedText;
-            titleElem.className = "vinted-filter-title";
+      // Find the .title-content element
+      const titleContentElem = item.querySelector(".title-content");
+      if (titleContentElem) {
+        // Avoid inserting multiple times
+        if (!item.querySelector(".vinted-filter-title")) {
+          const titleElem = document.createElement("div");
+          titleElem.textContent = truncatedText;
+          titleElem.className = "vinted-filter-title";
 
-            // Copy CSS classes from the price element
-            const priceElem = titleContentElem.querySelector(
-              '[data-testid$="--price-text"]',
-            );
-            if (priceElem) {
-              priceElem.classList.forEach((cls) => {
-                titleElem.classList.add(cls);
-              });
-            }
-
-            // Insert before .title-content
-            titleContentElem.parentNode.insertBefore(
-              titleElem,
-              titleContentElem,
-            );
+          // Copy CSS classes from the price element
+          const priceElem = titleContentElem.querySelector(
+            '[data-testid$="--price-text"]',
+          );
+          if (priceElem) {
+            priceElem.classList.forEach((cls) => {
+              titleElem.classList.add(cls);
+            });
           }
+
+          // Insert before .title-content
+          titleContentElem.parentNode.insertBefore(titleElem, titleContentElem);
         }
       }
-    });
+    }
+  });
 }
 
 function observeDynamicContent() {
@@ -154,7 +150,6 @@ function observeDynamicContent() {
 }
 
 function applyRules() {
-  console.log("apply all rules");
   filterNegativeBrands();
   showItemTitles();
   hideWardrobeSpotlight();
