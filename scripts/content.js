@@ -1,6 +1,7 @@
 const BRAND_SELECTORS = '[data-testid$="--description-title"]'; // Use testID to speficially target titles only, sizes and condition use the same selector
 
-const ITEM_CONTAINER_SELECTORS = ".feed-grid__item, .item-view-items__item";
+const ITEM_CONTAINER_SELECTORS =
+  ".feed-grid__item:not(.feed-grid__item--full-row), .item-view-items__item";
 const WARDROBE_SPOTLIGHT_SELECTOR =
   ".feed-grid__item.feed-grid__item--full-row";
 
@@ -22,11 +23,23 @@ chrome.storage.onChanged.addListener((changes, area) => {
     for (let [key, { newValue }] of Object.entries(changes)) {
       settings[key] = newValue;
     }
-    applyRules(); // Re-run when user changes settings
+
+    if (changes.negativeBrands || changes.enablePartialMatching) {
+      filterNegativeBrands();
+    }
+
+    if (changes.hideWardrobeSpotlight) {
+      hideWardrobeSpotlight();
+    }
+
+    if (changes.showItemTitles) {
+      showItemTitles();
+    }
   }
 });
 
 function filterNegativeBrands() {
+  console.log("negBrands");
   // Reset all negative brands
   document
     .querySelectorAll(ITEM_CONTAINER_SELECTORS)
@@ -68,10 +81,10 @@ function isNegativeBrand(brandName, negativeBrandList, enablePartialMatching) {
 }
 
 function hideWardrobeSpotlight() {
-  if (!settings.hideWardrobeSpotlight) return;
+  const displayStyle = settings.hideWardrobeSpotlight ? "none" : "";
 
   document.querySelectorAll(WARDROBE_SPOTLIGHT_SELECTOR).forEach((el) => {
-    el.style.display = "none";
+    el.style.display = displayStyle;
   });
 }
 
@@ -101,7 +114,7 @@ function showItemTitles() {
             titleElem.textContent = truncatedText;
             titleElem.className = "vinted-filter-title";
 
-            // Optionally copy classes from the price element if needed
+            // Copy CSS classes from the price element
             const priceElem = titleContentElem.querySelector(
               '[data-testid$="--price-text"]',
             );
@@ -124,7 +137,15 @@ function showItemTitles() {
 
 function observeDynamicContent() {
   const observer = new MutationObserver((mutationsList) => {
-    if (mutationsList.some((m) => m.addedNodes.length > 0)) {
+    if (
+      mutationsList.some((m) =>
+        Array.from(m.addedNodes).some(
+          (node) =>
+            node.nodeType === Node.ELEMENT_NODE &&
+            !node.classList.contains("vinted-filter-title"),
+        ),
+      )
+    ) {
       applyRules();
     }
   });
@@ -133,12 +154,8 @@ function observeDynamicContent() {
 }
 
 function applyRules() {
+  console.log("apply all rules");
   filterNegativeBrands();
   showItemTitles();
   hideWardrobeSpotlight();
 }
-
-window.addEventListener("load", () => {
-  applyRules();
-  observeDynamicContent();
-});

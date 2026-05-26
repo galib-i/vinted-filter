@@ -1,21 +1,21 @@
 body {
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 16px 18px 14px 18px;
   min-width: 280px;
   min-height: 180px;
 }
 
-h3 { 
+h3 {
   margin-top: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #FF2121;
+  color: #ff2121;
 }
 
 label {
   font-size: 14px;
-  color: #5A6566;
+  color: #5a6566;
 }
 
 textarea {
@@ -30,21 +30,21 @@ textarea {
   margin-bottom: 6px;
   resize: none;
   background: #fafafa;
-  color: #15191A;
+  color: #15191a;
   box-sizing: border-box;
   transition: border 0.2s;
 }
 
 textarea:focus {
-  border: 1.5px solid #FF2121;
+  border: 1.5px solid #ff2121;
   outline: none;
 }
 
 input[type="checkbox"] {
-  accent-color: #FF2121;
+  accent-color: #ff2121;
   margin-right: 6px;
-  transform: scale(1.2); 
-  }
+  transform: scale(1.2);
+}
 
 div {
   margin-top: 10px;
