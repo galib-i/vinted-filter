@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   const negativeBrandsTextarea = document.getElementById("negativeBrands");
   const enablePartialMatchingCheckbox = document.getElementById(
-    "enablePartialMatching"
+    "enablePartialMatching",
   );
   const hideWardrobeSpotlightCheckbox = document.getElementById(
-    "hideWardrobeSpotlight"
+    "hideWardrobeSpotlight",
   );
   const showItemTitlesCheckbox = document.getElementById("showItemTitles");
   const STORAGE_KEYS = [
@@ -32,21 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveSettings = () => {
     negativeBrandsTextarea.value = cleanBrands(negativeBrandsTextarea.value);
 
-    chrome.storage.sync.set(
-      {
-        negativeBrands: negativeBrandsTextarea.value,
-        enablePartialMatching: enablePartialMatchingCheckbox.checked,
-        hideWardrobeSpotlight: hideWardrobeSpotlightCheckbox.checked,
-        showItemTitles: showItemTitlesCheckbox.checked,
-      },
-      () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (tabs[0]?.id) {
-            chrome.tabs.sendMessage(tabs[0].id, { action: "reapplyFilter" });
-          }
-        });
-      }
-    );
+    chrome.storage.sync.set({
+      negativeBrands: negativeBrandsTextarea.value,
+      enablePartialMatching: enablePartialMatchingCheckbox.checked,
+      hideWardrobeSpotlight: hideWardrobeSpotlightCheckbox.checked,
+      showItemTitles: showItemTitlesCheckbox.checked,
+    });
   };
 
   negativeBrandsTextarea.addEventListener("blur", (e) => {
