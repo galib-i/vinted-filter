@@ -1,6 +1,6 @@
 {
-  "name": "Vinted Negative Brand Filter",
-  "description": "Select brands to remove from Vinted search results.",
+  "name": "Filtered",
+  "description": "Clean up your Vinted search results.",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
@@ -16,6 +16,6 @@
       "js": ["scripts/content.js"]
     }
   ],
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["storage"],
   "host_permissions": ["https://www.vinted.co.uk/*"]
 }

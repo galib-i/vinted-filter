@@ -1,5 +1,4 @@
 const BRAND_SELECTORS = '[data-testid$="--description-title"]'; // Use testID to speficially target titles only, sizes and condition use the same selector
-
 const ITEM_CONTAINER_SELECTORS =
   ".homepage-blocks__item, .feed-grid__item:not(.feed-grid__item--full-row), .item-view-items__item";
 const WARDROBE_SPOTLIGHT_SELECTOR =
@@ -14,31 +13,13 @@ let settings = {
   showItemTitles: false,
 };
 
-chrome.storage.sync.get(Object.keys(settings), (result) => {
-  Object.assign(settings, result);
-  applyRules();
-  observeDynamicContent();
-});
-
-chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === "sync") {
-    for (let [key, { newValue }] of Object.entries(changes)) {
-      settings[key] = newValue;
-    }
-
-    if (changes.negativeBrands || changes.enablePartialMatching) {
-      filterNegativeBrands();
-    }
-
-    if (changes.hideWardrobeSpotlight) {
-      hideWardrobeSpotlight();
-    }
-
-    if (changes.showItemTitles) {
-      showItemTitles();
-    }
-  }
-});
+function isNegativeBrand(brandName, negativeBrandList, enablePartialMatching) {
+  return negativeBrandList.some((negativeBrand) =>
+    enablePartialMatching
+      ? negativeBrand.length >= 2 && brandName.includes(negativeBrand)
+      : brandName === negativeBrand,
+  );
+}
 
 function filterNegativeBrands() {
   // Reset all negative brands
@@ -71,14 +52,6 @@ function filterNegativeBrands() {
       itemContainer.style.display = "none";
     }
   });
-}
-
-function isNegativeBrand(brandName, negativeBrandList, enablePartialMatching) {
-  return negativeBrandList.some((negativeBrand) =>
-    enablePartialMatching
-      ? negativeBrand.length >= 2 && brandName.includes(negativeBrand)
-      : brandName === negativeBrand,
-  );
 }
 
 function hideWardrobeSpotlight() {
@@ -131,6 +104,12 @@ function showItemTitles() {
   });
 }
 
+function applyRules() {
+  filterNegativeBrands();
+  showItemTitles();
+  hideWardrobeSpotlight();
+}
+
 function observeDynamicContent() {
   const observer = new MutationObserver((mutationsList) => {
     if (
@@ -149,8 +128,28 @@ function observeDynamicContent() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-function applyRules() {
-  filterNegativeBrands();
-  showItemTitles();
-  hideWardrobeSpotlight();
-}
+chrome.storage.sync.get(Object.keys(settings), (result) => {
+  Object.assign(settings, result);
+  applyRules();
+  observeDynamicContent();
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === "sync") {
+    for (let [key, { newValue }] of Object.entries(changes)) {
+      settings[key] = newValue;
+    }
+
+    if (changes.negativeBrands || changes.enablePartialMatching) {
+      filterNegativeBrands();
+    }
+
+    if (changes.hideWardrobeSpotlight) {
+      hideWardrobeSpotlight();
+    }
+
+    if (changes.showItemTitles) {
+      showItemTitles();
+    }
+  }
+});

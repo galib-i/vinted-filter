@@ -1,9 +1,12 @@
 <html>
   <head>
     <link rel="stylesheet" href="popup.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
   </head>
   <body>
-    <h3>Negative Brand Filter</h3>
     <label for="negativeBrands">Enter brands to hide (comma-separated):</label>
     <textarea id="negativeBrands" placeholder="Shein, Primark.."></textarea>
 
@@ -12,7 +15,7 @@
         <li class="option">
           <input type="checkbox" id="enablePartialMatching" />
           <label class="checkbox-label" for="enablePartialMatching"
-            >Enable partial matching</label
+            >Hide partial brand matches</label
           >
         </li>
         <li class="option">
@@ -26,10 +29,16 @@
           <label class="checkbox-label" for="showItemTitles"
             >Show item titles</label
           >
+          <a
+            href="https://github.com/galib-i/filtered"
+            target="_blank"
+            style="margin-left: auto"
+          >
+            <i class="fa-brands fa-github"></i>
+          </a>
         </li>
       </ul>
     </div>
-
     <script src="popup.js"></script>
   </body>
 </html>

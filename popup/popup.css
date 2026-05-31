@@ -6,14 +6,8 @@ body {
   min-height: 180px;
 }
 
-h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #ff2121;
-}
-
-label {
+label,
+i.fa-brands {
   font-size: 14px;
   color: #5a6566;
 }
