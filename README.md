@@ -1,10 +1,12 @@
+
 # Filtered
 
 Better Vinted browsing.
 
 <p align="center">
-  <img width="595" height="479" alt="a" src="https://github.com/user-attachments/assets/685d3d88-026f-47d2-b519-8c96b74f59d6" />
+  <img width="595" height="479" alt="tutorial" src="https://github.com/user-attachments/assets/767f7ce1-c90a-4918-ab0a-62230bf757e7" />
 </p>
+
 
 - Filter out items from unwanted brands.
 - Hide wardrobe spotlights.
